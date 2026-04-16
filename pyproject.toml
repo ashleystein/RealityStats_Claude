@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reality-stats"
+version = "0.1.0"
+description = "Reality TV stats and analytics"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "boto3",
+    "dash",
+    "dash-ag-grid",
+    "dash-cytoscape",
+    "networkx",
+    "pandas",
+    "requests",
+    "dagster",
+    "beautifulsoup4",
+    "dagster-dg-cli>=1.12.1",
+    "dagster-webserver",
+]
+
+# Tells Dagster webserver and daemon where to look for the data pipelines
+# assets, jobs and schedules)
+[tool.dagster]
+
+# Points to the specific py file where the
+# definitions object is. Dagster loads this file to "see" the pipeline.
+module_name = "src.data_pipeline.definitions"
+
+# Name for the workspace. In the UI, your code will be grouped under this label.
+code_location_name = "reality-stats"
+
+# Python packaging configuration. It tells Python's build system how to
+# bundle your code if you were to install it as library.
+[tool.setuptools.packages.find]
+where = ["."] # Look in the current root directory for code.
+include = ["src*"] # Only include folders that start with "src".
+
+# For Dagster CLI(dg), used to manage Dagster projects and environments.
+[tool.dg]
+directory_type = "project" # Tells the CLI that this folder represents a full Dagster project
+# (rather than just a component or a library)
+
+# Identifies the heart of the project. It is the top-level Python package where the CLI will scaffold
+# new assets or sensors.
+[tool.dg.project]
+root_module = "data_pipeline" # Points to the folder containing your code
